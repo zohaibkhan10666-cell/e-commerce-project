@@ -1,0 +1,25 @@
+2026-05-05T17:01:59: [dotenv@17.3.1] injecting env (9) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+2026-05-05T17:01:59: [dotenv@17.3.1] injecting env (0) from .env -- tip: 🛡️ auth for agents: https://vestauth.com
+2026-05-05T17:02:00: [dotenv@17.3.1] injecting env (0) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+2026-05-05T17:02:00: JAZZCASH_MERCHANT_ID: MC46312
+2026-05-05T17:02:00: === SERVER STARTING ===
+2026-05-05T17:02:00: PORT: 8000
+2026-05-05T17:02:00: MAIL_USER: zk5627407@gmail.com
+2026-05-05T17:02:00: MAIL_PASS: SET
+2026-05-05T17:02:30: Database connected!
+2026-05-05T17:02:30: Server listening on port 8000
+2026-05-05T17:02:30: Test at: http://localhost:8000/test-email
+2026-05-05T17:05:47: Fetching categories...
+2026-05-05T17:06:07: Categories found: 0
+2026-05-05T17:11:05: [dotenv@17.3.1] injecting env (9) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+2026-05-05T17:11:05: [dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+2026-05-05T17:11:06: [dotenv@17.3.1] injecting env (0) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+2026-05-05T17:11:06: JAZZCASH_MERCHANT_ID: MC46312
+2026-05-05T17:11:06: === SERVER STARTING ===
+2026-05-05T17:11:06: PORT: 8000
+2026-05-05T17:11:06: MAIL_USER: zk5627407@gmail.com
+2026-05-05T17:11:06: MAIL_PASS: SET
+2026-05-05T17:11:06: Using DB URI: mongodb://127.0.0.1:27017/ecommerce
+2026-05-05T17:11:36: Database connected!
+2026-05-05T17:11:36: Server listening on port 8000
+2026-05-05T17:11:36: Test at: http://localhost:8000/test-email

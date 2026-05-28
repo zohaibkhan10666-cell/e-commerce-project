@@ -1,0 +1,4 @@
+2026-05-05T17:02:30: Error connecting to MongoDB: connect ECONNREFUSED 127.0.0.1:27017
+2026-05-05T17:02:30: Server will continue without database connection
+2026-05-05T17:11:36: Error connecting to MongoDB: connect ECONNREFUSED 127.0.0.1:27017
+2026-05-05T17:11:36: Server will continue without database connection

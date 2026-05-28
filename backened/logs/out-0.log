@@ -1,0 +1,23 @@
+2026-05-05T17:01:58: [dotenv@17.3.1] injecting env (9) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+2026-05-05T17:01:58: [dotenv@17.3.1] injecting env (0) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+2026-05-05T17:01:58: [dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+2026-05-05T17:01:58: JAZZCASH_MERCHANT_ID: MC46312
+2026-05-05T17:01:58: === SERVER STARTING ===
+2026-05-05T17:01:58: PORT: 8000
+2026-05-05T17:01:58: MAIL_USER: zk5627407@gmail.com
+2026-05-05T17:01:58: MAIL_PASS: SET
+2026-05-05T17:02:28: Database connected!
+2026-05-05T17:02:28: Server listening on port 8000
+2026-05-05T17:02:28: Test at: http://localhost:8000/test-email
+2026-05-05T17:11:04: [dotenv@17.3.1] injecting env (9) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+2026-05-05T17:11:04: [dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+2026-05-05T17:11:04: [dotenv@17.3.1] injecting env (0) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+2026-05-05T17:11:04: JAZZCASH_MERCHANT_ID: MC46312
+2026-05-05T17:11:04: === SERVER STARTING ===
+2026-05-05T17:11:04: PORT: 8000
+2026-05-05T17:11:04: MAIL_USER: zk5627407@gmail.com
+2026-05-05T17:11:04: MAIL_PASS: SET
+2026-05-05T17:11:04: Using DB URI: mongodb://127.0.0.1:27017/ecommerce
+2026-05-05T17:11:34: Database connected!
+2026-05-05T17:11:34: Server listening on port 8000
+2026-05-05T17:11:34: Test at: http://localhost:8000/test-email
