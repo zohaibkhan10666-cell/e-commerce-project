@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JazzCash Token Generator (Sandbox)</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;background:#f7f7f7;margin:0;padding:24px}
+    .wrap{max-width:720px;margin:0 auto;background:#fff;border-radius:12px;padding:20px;box-shadow:0 6px 20px rgba(0,0,0,.06)}
+    h1{margin:0 0 8px;font-size:20px}
+    p{color:#555;margin:0 0 16px}
+    label{display:block;margin:12px 0 6px;font-weight:600}
+    input{width:100%;padding:10px;border:1px solid #ddd;border-radius:10px}
+    button{margin-top:16px;padding:12px 16px;border:0;border-radius:10px;background:#2563eb;color:#fff;font-weight:700;cursor:pointer}
+    pre{background:#0b1020;color:#e5e7eb;padding:14px;border-radius:10px;overflow:auto}
+    .hint{font-size:12px;color:#666;line-height:1.4}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>JazzCash Mobile Wallet - Sandbox PaymentToken Generator</h1>
+    <p>Step 1: create/enter MPIN + OTP on JazzCash page. Step 2: after confirmation, you’ll receive <b>pp_Response</b> JSON containing the <b>payment token</b>.</p>
+
+    <div class="hint">
+      This page submits a form to JazzCash sandbox endpoint to trigger token generation.
+      You must replace <b>YOUR_MERCHANT_ID / YOUR_PASSWORD / YOUR_INTEGRITY_SALT</b> in the script below.
+      Also set <b>YOUR_CALL_BACK_URL</b> to a URL where JazzCash redirects after response.
+      In this project, we use a placeholder callback that will print the response token.
+    </div>
+
+    <form id="tokenForm">
+      <label>Phone Number (testing number)</label>
+      <input id="phone" value="03123456789" placeholder="03123456789" />
+
+      <button type="submit">Generate Token</button>
+    </form>
+
+    <h3 style="margin-top:22px">JazzCash Response</h3>
+    <pre id="result">(waiting...)</pre>
+  </div>
+
+  <script>
+    // === CONFIG (REQUIRED) ===
+    const JAZZ_MERCHANT_ID = 'YOUR_MERCHANT_ID';
+    const JAZZ_PASSWORD = 'YOUR_PASSWORD';
+    const JAZZ_INTEGRITY_SALT = 'YOUR_INTEGRITY_SALT';
+
+    // JazzCash Sandbox API endpoint (token generation trigger)
+    // NOTE: This endpoint is commonly the same domwallettransactionviatoken flow but used to get a token.
+    // Many integrations also use a separate token generation HTML flow.
+    // Keep it here as repo-compatible approach.
+    const JAZZ_ACTION_URL = 'https://sandbox.jazzcash.com.pk/ApplicationAPI/API/4.0/purchase/domwallettransactionviatoken';
+
+    // This callback should be reachable from your browser during testing.
+    // Best: host this app via http://localhost:8000 (backend) or use frontend dev server.
+    // For simplicity, we use current URL with query params.
+    const RETURN_URL = window.location.origin + window.location.pathname;
+
+    // === crypto-js (small inline fallback) ===
+    // We try to use window.crypto.subtle if available; otherwise, require that repo includes crypto-js.
+    // For easiest local run, we dynamically load crypto-js from CDN.
+    async function loadCryptoJS(){
+      if(window.CryptoJS) return;
+      await new Promise((resolve, reject)=>{
+        const s = document.createElement('script');
+        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js';
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
+      });
+    }
+
+    function fmtNow(){
+      const d = new Date();
+      const pad = (n)=> String(n).padStart(2,'0');
+      return d.getFullYear() + pad(d.getMonth()+1) + pad(d.getDate()) + pad(d.getHours()) + pad(d.getMinutes()) + pad(d.getSeconds());
+    }
+
+    async function shaHmacSHA256Upper(hashString, key){
+      await loadCryptoJS();
+      return CryptoJS.HmacSHA256(hashString, key).toString().toUpperCase();
+    }
+
+    async function submitTokenRequest(phone){
+      const txnDateTime = fmtNow();
+      const txnExpiryDateTime = fmtNow();
+      const orderNumber = 'ORD-TOKEN-' + Date.now();
+      const amountStr = '1.00';
+      const txnRefNo = 'TXN' + Date.now();
+
+      const hashString = [
+        JAZZ_INTEGRITY_SALT,
+        amountStr,
+        orderNumber,
+        'Token Request',
+        'EN',
+        JAZZ_MERCHANT_ID,
+        JAZZ_PASSWORD,
+        'PKR',
+        txnDateTime,
+        txnExpiryDateTime,
+        txnRefNo
+      ].join('&');
+
+      const secureHash = await shaHmacSHA256Upper(hashString, JAZZ_INTEGRITY_SALT);
+
+      // Submit via form POST by redirecting with fetch to keep browser in flow.
+      // We do a plain POST and then show result if JazzCash returns JSON.
+      // In practice, JazzCash typically redirects to pp_ReturnURL.
+      const body = {
+        pp_MerchantID: JAZZ_MERCHANT_ID,
+        pp_Password: JAZZ_PASSWORD,
+        pp_TxnRefNo: txnRefNo,
+        pp_Amount: amountStr,
+        pp_TxnCurrency: 'PKR',
+        pp_TxnDateTime: txnDateTime,
+        pp_BillReference: orderNumber,
+        pp_Description: 'Token Request',
+        pp_TxnExpiryDateTime: txnExpiryDateTime,
+        pp_ReturnURL: RETURN_URL,
+        pp_SecureHash: secureHash,
+        // token generation flows may use MSISDN
+        pp_CustomerAccount: phone
+      };
+
+      // Use a simple redirect method by building a hidden form
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = JAZZ_ACTION_URL;
+      for(const [k,v] of Object.entries(body)){
+        const inp = document.createElement('input');
+        inp.type = 'hidden';
+        inp.name = k;
+        inp.value = v;
+        form.appendChild(inp);
+      }
+      document.body.appendChild(form);
+      form.submit();
+    }
+
+    // If JazzCash returns with query params, dump them.
+    function dumpResponse(){
+      const params = new URLSearchParams(window.location.search);
+      const data = Object.fromEntries(params.entries());
+      const text = Object.keys(data).length ? JSON.stringify(data, null, 2) : '(no response query params found)';
+      document.getElementById('result').textContent = text;
+    }
+
+    document.getElementById('tokenForm').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const phone = document.getElementById('phone').value.trim();
+      if(!phone){ alert('Phone required'); return; }
+      await submitTokenRequest(phone);
+    });
+
+    dumpResponse();
+  </script>
+</body>
+</html>
+
