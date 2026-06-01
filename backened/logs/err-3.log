@@ -1,7 +1,0 @@
-2026-05-05T17:02:30: Error connecting to MongoDB: connect ECONNREFUSED 127.0.0.1:27017
-2026-05-05T17:02:30: Server will continue without database connection
-2026-05-05T17:05:37: Get products error: Operation `products.find()` buffering timed out after 10000ms
-2026-05-05T17:05:47: Get products error: Operation `products.find()` buffering timed out after 10000ms
-2026-05-05T17:05:57: Get products error: Operation `products.find()` buffering timed out after 10000ms
-2026-05-05T17:11:36: Error connecting to MongoDB: connect ECONNREFUSED 127.0.0.1:27017
-2026-05-05T17:11:36: Server will continue without database connection

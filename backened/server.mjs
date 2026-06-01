@@ -7,9 +7,8 @@ import productRoutes from './routes/productRoutes.js'
 import adminRoutes from './routes/adminRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
 import jazzcashRoutes from './routes/jazzcashRoutes.js'
-import { sendOTPEmail } from './utils/emailService.js'
-
 import { fileURLToPath } from 'url'
+
 import path from 'path'
 
 
@@ -20,13 +19,7 @@ const __dirname = path.dirname(__filename)
 dotenv.config({ path: process.env.DOTENV_PATH || path.join(__dirname, '.env') })
 
 
-// Log JazzCash config (debug)
-console.log('JAZZCASH_MERCHANT_ID:', process.env.JAZZCASH_MERCHANT_ID || 'NOT SET')
-console.log('MAIL_USER:', process.env.MAIL_USER || 'NOT SET')
-console.log('MAIL_PASS:', process.env.MAIL_PASS ? 'SET' : 'NOT SET')
 
-console.log('=== SERVER STARTING ===')
-console.log('PORT:', process.env.PORT || 3000)
 
 const app = express()
 const port = process.env.PORT ? Number(process.env.PORT) : 3000
@@ -35,24 +28,7 @@ app.use(express.json({ limit: '50mb' }))
 app.use(express.urlencoded({ limit: '50mb', extended: true }))
 app.use(cors())
 
-// Test endpoint to send OTP email
-app.get('/test-email', async (req, res) => {
-    console.log('=== TEST EMAIL ENDPOINT CALLED ===')
-    try {
-        const testOTP = '12345'
-        const testEmail = 'test@example.com'
-        
-        console.log('Sending test email to:', testEmail)
-        console.log('OTP:', testOTP)
-        
-        await sendOTPEmail(testEmail, testOTP, 'verification')
-        
-        res.json({ success: true, message: 'Test email sent!' })
-    } catch (error) {
-        console.log('Test email error:', error.message)
-        res.status(500).json({ success: false, error: error.message })
-    }
-})
+
 
 // application routes
 app.use('/api/v1/users', userRoutes)

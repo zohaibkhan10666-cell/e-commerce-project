@@ -1,0 +1,26 @@
+# Root gitignore
+# Local env / secrets
+.env
+.env.*
+backened/.env
+frontend/.env
+frontend/.env.*
+
+# Logs
+backened/logs/*.log
+
+# Dependencies
+node_modules/
+frontend/node_modules/
+backened/node_modules/
+
+# Build outputs
+frontend/dist/
+
+# Local editor/tooling
+.sixth/
+
+# OS
+.DS_Store
+Thumbs.db
+
